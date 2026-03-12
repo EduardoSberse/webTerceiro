@@ -1,10 +1,16 @@
-var builder = WebApplication.CreateBuilder(args);
+using Biblioteca.Models;
+using Microsoft.EntityFrameworkCore;
 
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
+builder.Services.AddDbContext<BibliotecaContext>
+    (options => options.UseMySql(connectionString,
+        ServerVersion.AutoDetect(connectionString))
+    );
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
